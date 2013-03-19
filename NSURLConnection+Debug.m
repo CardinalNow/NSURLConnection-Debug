@@ -13,33 +13,33 @@
 
 @implementation NSURLConnection (Debug)
 
+/**
+ *  iOS 6 delegate signature
+ */
 -(void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge{
     [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-    //[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
 -(id)swizzled_initWithRequest:(NSURLRequest *)request delegate:(id)delegate{
     if (DEBUGABLE){
-        //Double Swizzle, set the
-        // method on the delegate to our instance
+        //Double Swizzle, set the method on the delegate to our instance
         Method original;
-        //-(void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+
         original = class_getInstanceMethod([delegate class], @selector(connection:willSendRequestForAuthenticationChallenge:));
 
         if (original){
             // Get the "- (id)swizzled_initWithFrame:" method.
             Method swizzle = class_getInstanceMethod([self class], @selector(connection:willSendRequestForAuthenticationChallenge:));
-
             // Swap their implementations.
             method_exchangeImplementations(original, swizzle);
         }else{
             // Get the "- (id)swizzled_initWithFrame:" method.
             IMP swizzle = [self methodForSelector:@selector(connection:willSendRequestForAuthenticationChallenge:)];
-
+            // Add the implementation to the class
             class_addMethod([delegate class], @selector(connection:willSendRequestForAuthenticationChallenge:), swizzle, "B@:@@");
         }
     }
-    // This is the confusing part (article explains this line).
+    // This is the confusing part we need to call the original init method, but we've switched its implementation with the swizzled one.
     id result = [self swizzled_initWithRequest:request delegate:delegate];
     return result;
 }
