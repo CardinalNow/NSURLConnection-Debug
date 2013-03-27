@@ -1,5 +1,7 @@
-iOS Application Wide Bypass of SSL Certificate Chain Trust Validation
+##iOS Application Wide Bypass of SSL Certificate Chain Trust Validation
 
 Simply toggle the #define to allow any SSL certificate application wide.
 
-http://www.cardinalsolutions.com/blogs/mobile.html
+[http://www.cardinalsolutions.com/blogs/mobile/2013/03/ios_application_wide.html](http://www.cardinalsolutions.com/blogs/mobile/2013/03/ios_application_wide.html)
+
+![Screen Shot](http://www.cardinalsolutions.com/etc/designs/blog/csgblogs/resources/images/logo_footer.png)
